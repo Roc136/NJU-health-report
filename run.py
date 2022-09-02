@@ -94,7 +94,7 @@ if __name__ == "__main__":
             os._exit(0)
     except Exception as e:
         log.error(e)
-        notify(e)
+        notify(str(e))
         os._exit(0)
     log.info('登陆成功！')
 

@@ -13,7 +13,7 @@ from io import BytesIO
 import njupass.ocr
 import time
 
-URL_NJU_UIA_AUTH = 'https://authserver.nju.edu.cn/authserver/login'
+URL_NJU_UIA_AUTH = 'https://authserver.nju.edu.cn/authserver/index.do'
 URL_NJU_ELITE_LOGIN = 'http://elite.nju.edu.cn/jiaowu/login.do'
 URL_JKDK_INDEX = 'http://ehallapp.nju.edu.cn/xgfw/sys/mrjkdkappnju/index.do'
 URL_JKDK_LIST = 'http://ehallapp.nju.edu.cn/xgfw/sys/yqfxmrjkdkappnju/apply/getApplyInfoList.do'
