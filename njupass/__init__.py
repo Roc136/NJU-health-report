@@ -29,6 +29,7 @@ class NjuUiaAuth:
     """
 
     def __init__(self):
+        self.cookies = None
         self.session = requests.Session()
         self.session.headers.update({
             'User-Agent': MY_UA,
@@ -118,6 +119,16 @@ class NjuUiaAuth:
         r = self.session.post(URL_NJU_UIA_AUTH, data=data,
                               allow_redirects=False)
         return r.status_code == 302
+
+    def setCookies(self, cookies):
+        self.cookies = {item.split('=')[0]: item.split('=')[1] for item in cookies.split("; ")}
+        self.session.get(URL_NJU_UIA_AUTH)
+        for key, value in self.cookies.items():
+            self.session.cookies.set(key, value)
+        res = self.session.get(URL_NJU_UIA_AUTH, cookies=self.cookies).text
+        if res.find('个人设置') != -1:
+            return True
+        return False
 
     def getHistory(self):
         self.session.get(URL_JKDK_INDEX)

@@ -84,32 +84,16 @@ if __name__ == "__main__":
     if username == '' or password == '' or (location_info_from == 'CONFIG' and curr_location == ''):
         log.error('账户、密码或地理位置信息为空！请检查是否正确地设置了 SECRET 项（GitHub Action）。')
         notify('账户、密码或地理位置信息为空！请检查是否正确地设置了 SECRET 项（GitHub Action）。')
-        os._exit(1)
+        os._exit(0)
 
     log.info('尝试登录...')
-    for count in range(10):
-        try:
-            if auth.needCaptcha(username):
-                log.info("统一认证平台需要输入验证码才能继续，尝试识别验证码...")
-
-            ok = auth.tryLogin(username, password)
-            if not ok:
-                log.error("登录失败。可能是用户名或密码错误，或是验证码无法识别。")
-                notify("登录失败。可能是用户名或密码错误，或是验证码无法识别。")
-                os._exit(1)
-
-            log.info('登录成功！')
-            break
-        except  Exception as e:
-            if count == 9:
-                log.error(e)
-                log.error('多次登陆连接失败，脚本暂不可用')
-                notify('多次登陆连接失败，脚本暂不可用')
-                os._exit(1)
-            else:
-                log.error(e)
-                log.error('登陆连接失败，1min后重试...')
-                time.sleep(60)  # 等1min
+    try:
+        if not auth.setCookies(password):
+            log.error('Cookies错误或失效')
+            os._exit(0)
+    except Exception as e:
+        log.error(e)
+        os._exit(0)
 
     # 随机等待0-16.6667min
     if random_sleep:
@@ -153,4 +137,4 @@ if __name__ == "__main__":
 
     log.error("打卡失败，请尝试手动打卡")
     notify("打卡失败，请手动打卡！")
-    os._exit(-1)
+    os._exit(0)
