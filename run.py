@@ -90,16 +90,22 @@ if __name__ == "__main__":
     try:
         if not auth.setCookies(password):
             log.error('Cookies错误或失效')
+            notify('Cookies错误或失效')
             os._exit(0)
     except Exception as e:
         log.error(e)
+        notify(e)
         os._exit(0)
+    log.info('登陆成功！')
 
     # 随机等待0-16.6667min
     if random_sleep:
         sleep_time = random.random()*1000
         log.info('随机等待，正在等待...(等待时间：%ds)' % sleep_time)
         time.sleep(sleep_time)
+    else:
+        log.info('延时10s...')
+        time.sleep(10)
 
     for count in range(10):
         log.info('尝试获取打卡列表信息...')

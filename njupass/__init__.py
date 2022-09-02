@@ -122,6 +122,7 @@ class NjuUiaAuth:
 
     def setCookies(self, cookies):
         self.cookies = {item.split('=')[0]: item.split('=')[1] for item in cookies.split("; ")}
+        self.session.headers.update({'User-Agent': MY_UA})
         self.session.get(URL_NJU_UIA_AUTH)
         for key, value in self.cookies.items():
             self.session.cookies.set(key, value)
