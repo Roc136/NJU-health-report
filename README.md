@@ -16,16 +16,22 @@
 - 2022-4-10 更新了近日离宁和核酸时间的支持。 
 - 2021-10-19 之前使用的方案实测已经无法正常使用，目前已回退旧方案。已 fork 的用户请更新后使用。
 - 2022-09-03 应对统一身份认证2.0，使用Cookie登陆。
+- 2022-10-09 增加核酸检测时间的计算方式
 
 ## 使用方法
 1. 将本项目 Fork 到自己的仓库。
 2. 打开自己 Fork 之后的仓库，因为没有填写账户信息，此时若触发打卡，一定会失败。
 3. 进入 `Settings` 选项，点击 `Secret`，并选择 `New Repository Secret`。依次添加以下变量：
    - `username`: 学号
-   - `password`: 南京大学统一认证的密码
+   - `password`: 登陆的COOKIES
    - `location_info_from`: 地址信息来源: `CONFIG` 或 `LAST`, 分别表示配置中或上次打卡信息, 默认 `LAST`
    - `location`: 你希望打卡的地理位置。比如南京大学仙林校区可以填 `中国江苏省南京市栖霞区九乡河东路`
-   - `covid_test_method`: 核酸检测日期方式: `YESTERDAY`, `LAST`, `NORMALIZATION`, `NORMALIZATION&LAST`, 分别表示昨天、上次打卡信息、常态化、常态化和上次打卡中较新的一个，默认 `YESTERDAY`
+   - `covid_test_method`: 核酸检测日期方式，固定填写以下内容: 
+     - `YESTERDAY`：昨天，默认值
+     - `LAST`：上次手动填写的时间
+     - `NORMALIZATION`：按学校规则的常态化核酸检测时间（按照最开始的学号分配规则，目前已不需要）
+     - `NORMALIZATION&LAST`：常态化和上次打卡中较新的一个
+     - `STEP::<%Y-%m-%d %H:%M>::<step(day)>`：根据起始时间和时间间隔计算上次核酸检测时间，例如 `STEP::2022-10-07 17:00::2`，表示从10.7开始每2天做一次检测，每次都在17:00做
    - `mail_username`: 发送邮件的邮箱账号
    - `mail_password`: 发送邮件的邮箱密码（smtp）
    - `receive_email`: 接收邮件的账号

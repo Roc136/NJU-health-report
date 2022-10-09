@@ -46,9 +46,18 @@ def get_zjhs_time(method='YESTERDAY', username=None, last_time=None):
         else:
             date = get_normalization_date(username).strftime("%Y-%m-%d %-H")
         return date
+    elif method.startswith("STEP"):  # 根据起始时间和时间间隔计算上次核酸检测时间，例STEP::2022-10-07 17:00::2
+        infos = method.split("::")
+        start_date = infos[1]
+        step = int(infos[2])
+
+        today = datetime.datetime.now(timezone('Asia/Shanghai'))
+        date = datetime.datetime.strptime(start_date, "%Y-%m-%d %H:%M")
+        while (today.replace(tzinfo=None) - date).days >= step:
+            date += datetime.timedelta(days=step)
+        return date
     else:
-        log.info('核酸检测日期方式方式不正确，使用默认设置: LAST')
-        return last_time
+        raise Exception("核酸检测日期方式方式不正确")
 
 
 def get_location(location_info_from, last_location):
@@ -124,7 +133,14 @@ if __name__ == "__main__":
 
         # 根据配置填写地址和核酸检测信息
         curr_location = get_location(location_info_from, dk_info[1]["CURR_LOCATION"])
-        zjhs_time = get_zjhs_time(method, username, dk_info[1]['ZJHSJCSJ'])
+        try:
+            zjhs_time = get_zjhs_time(method, username, dk_info[1]['ZJHSJCSJ'])
+        except Exception as e:
+            log.error(e)
+            log.error("最近核酸检测日期配置错误")
+            notify("最近核酸检测日期配置错误")
+            os._exit(0)
+
 
         if dk_info[0]['TBZT'] == "0":
             log.info('正在打卡...')
