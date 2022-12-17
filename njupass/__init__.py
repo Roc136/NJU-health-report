@@ -137,7 +137,7 @@ class NjuUiaAuth:
         return self.session.get(URL_JKDK_LIST)
 
     def checkin(self, wid, curr_location, zjhs_time):
-        data = "?WID={}&IS_TWZC=1&CURR_LOCATION={}&ZJHSJCSJ={}&JRSKMYS=1&IS_HAS_JKQK=1&JZRJRSKMYS=1&SFZJLN=0".format(
+        data = "?WID={}&IS_TWZC=1&CURR_LOCATION={}&ZJHSJCSJ={}&JRSKMYS=1&IS_HAS_JKQK=1&JZRJRSKMYS=1&SFZJLN=1".format(
             wid, curr_location, zjhs_time)
         url = URL_JKDK_APPLY + data
         self.updateHeaders()
