@@ -127,7 +127,7 @@ class NjuUiaAuth:
         for key, value in self.cookies.items():
             self.session.cookies.set(key, value)
         res = self.session.get(URL_NJU_UIA_AUTH, cookies=self.cookies).text
-        if res.find('个人设置') != -1:
+        if res.find('个人资料') != -1:
             return True
         return False
 
